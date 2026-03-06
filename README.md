@@ -193,8 +193,6 @@ Explains the dataset, methodology, and system architecture.
 
 # 📸 Screenshots
 
-Add screenshots of your deployed application.
-
 ### Landing Page
 
 ![Landing Page](images/landing_page.png)
