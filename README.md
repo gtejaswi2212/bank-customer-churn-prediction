@@ -1,174 +1,348 @@
-# Bank Customer Churn Prediction
+# 🏦 Bank Customer Churn Prediction
 
-A production-style, end-to-end **customer churn prediction** project: from raw data to a deployable web app with model insights and business-oriented outputs. Built to showcase ML fundamentals, software engineering practices, and clear business impact.
+![Python](https://img.shields.io/badge/Python-3.10-blue)
+![Machine Learning](https://img.shields.io/badge/Machine%20Learning-ScikitLearn-orange)
+![Flask](https://img.shields.io/badge/Framework-Flask-lightgrey)
+![Deployment](https://img.shields.io/badge/Deployment-Render-green)
 
----
+🔗 **Live Demo:**
+[https://bank-customer-churn-prediction-9k9h.onrender.com/](https://bank-customer-churn-prediction-9k9h.onrender.com/)
 
-## Overview
+An **end-to-end machine learning system for predicting customer churn** with a deployable web application.
+This project demonstrates how predictive models can be integrated into production-style systems to help businesses identify customers likely to leave and take proactive retention actions.
 
-**Business problem:** Banks need to identify customers at risk of churning so they can take proactive retention actions. This project delivers a trained classifier, explainability (feature importance, risk categories), and a web interface for predictions and insights.
-
-**What’s included:**
-
-- **Modular ML pipeline:** load → validate → preprocess → encode → scale → train (Logistic Regression, Random Forest, XGBoost) → evaluate → save artifacts
-- **Reproducible training** with train/validation/test splits, optional SMOTE for class imbalance, and saved encoders/scalers
-- **Model explainability:** feature importance plots, confusion matrix, ROC curve, model comparison
-- **Web app:** landing page, prediction form (churn probability + risk category + retention action), model insights, about page
-- **Tests** for preprocessing and prediction helpers
-- **Deployment-ready:** Gunicorn, Procfile, environment-friendly config
+The system includes a **complete ML pipeline, explainability, a prediction interface, and cloud deployment**.
 
 ---
 
-## Dataset
+# 🚀 Project Impact
 
-- **File:** `analytical_base_table.csv` (in repo root; can also be placed under `data/raw/`)
-- **Rows:** ~10,000 customers
-- **Columns:** CreditScore, Geography, Gender, Age, Tenure, Balance, NumOfProducts, HasCrCard, IsActiveMember, EstimatedSalary, **Exited** (churn target)
+This project demonstrates how machine learning can support **customer retention strategies** in financial services.
+
+Key outcomes:
+
+• Built a **modular ML pipeline** from raw data to deployment
+• Compared **multiple machine learning models**
+• Implemented **model explainability using feature importance analysis**
+• Developed a **web application for real-time churn predictions**
+• Added **business-oriented churn risk categories and retention suggestions**
+• Deployed the application to the cloud for public access
 
 ---
 
-## Project Structure
+# 🌐 Live Application
+
+Try the deployed application:
+
+👉 [https://bank-customer-churn-prediction-9k9h.onrender.com/](https://bank-customer-churn-prediction-9k9h.onrender.com/)
+
+Features available in the live demo:
+
+• Real-time churn prediction
+• Probability score for churn risk
+• Risk classification (Low / Medium / High)
+• Recommended retention actions
+• Model performance insights
+
+---
+
+# 🧠 Problem Statement
+
+Customer churn significantly impacts profitability for subscription-based and financial services businesses.
+
+Research shows acquiring a new customer can cost **5–7× more than retaining an existing one**.
+
+Predictive models help businesses identify **high-risk customers early**, enabling targeted retention strategies.
+
+This project builds a machine learning system that predicts whether a customer will churn based on demographic and financial attributes.
+
+---
+
+# 📊 Dataset
+
+The dataset contains approximately **10,000 bank customers** with demographic and financial attributes.
+
+| Feature         | Description                  |
+| --------------- | ---------------------------- |
+| CreditScore     | Customer credit score        |
+| Geography       | Country of residence         |
+| Gender          | Customer gender              |
+| Age             | Age of customer              |
+| Tenure          | Years with the bank          |
+| Balance         | Account balance              |
+| NumOfProducts   | Number of bank products used |
+| HasCrCard       | Credit card ownership        |
+| IsActiveMember  | Activity status              |
+| EstimatedSalary | Estimated income             |
+| Exited          | Target variable (1 = churn)  |
+
+---
+
+# ⚙️ Machine Learning Pipeline
+
+The model training workflow includes:
+
+### 1️⃣ Data Validation
+
+Schema validation and dataset verification.
+
+### 2️⃣ Data Preprocessing
+
+• Missing value handling
+• One-hot encoding for categorical variables
+• Feature scaling with StandardScaler
+
+### 3️⃣ Train/Test Split
+
+Stratified splitting to maintain class balance.
+
+### 4️⃣ Handling Class Imbalance
+
+SMOTE applied to improve minority class prediction.
+
+### 5️⃣ Model Training
+
+Algorithms evaluated:
+
+• Logistic Regression
+• Random Forest
+• XGBoost
+
+### 6️⃣ Model Evaluation
+
+Metrics used:
+
+• Accuracy
+• Precision
+• Recall
+• F1 Score
+• ROC-AUC
+
+Generated visualizations:
+
+• Feature importance
+• Confusion matrix
+• ROC curve
+• Model comparison
+
+### 7️⃣ Deployment
+
+The best performing model is serialized and integrated into a Flask web application for real-time predictions.
+
+---
+
+# 🏗 System Architecture
 
 ```
-bank-customer-churn-prediction/
-├── app/
-│   ├── __init__.py          # Flask app factory
-│   ├── routes.py            # Routes and form handling
-│   ├── templates/           # Jinja2 HTML
-│   └── static/css/          # Styles
-├── src/
-│   ├── data/
-│   │   ├── preprocess.py    # Load, encode, split
-│   │   ├── validate.py      # Schema validation
-│   │   └── feature_engineering.py
-│   ├── models/
-│   │   ├── train.py         # Full training pipeline
-│   │   ├── predict.py       # Inference + risk + actions
-│   │   ├── evaluate.py      # Metrics
-│   │   └── explain.py       # Feature importance / SHAP
-│   └── utils/
-│       ├── config.py        # Paths, constants
-│       ├── logger.py
-│       └── helpers.py
-├── notebooks/
-│   └── churn_eda.ipynb      # EDA
-├── artifacts/               # After training
+User Input (Web Form)
+        │
+        ▼
+Flask Web Application
+        │
+        ▼
+Prediction Pipeline
+        │
+        ├── Data Preprocessing
+        ├── Feature Encoding
+        ├── Feature Scaling
+        │
+        ▼
+Trained ML Model
+        │
+        ▼
+Prediction Output
+        │
+        ├── Churn Probability
+        ├── Risk Category
+        └── Retention Recommendation
+```
+
+---
+
+# 💻 Web Application
+
+The project includes a **fully functional web interface**.
+
+### Landing Page
+
+Overview of the project and navigation.
+
+### Prediction Page
+
+Users can input customer information to receive:
+
+• churn prediction
+• churn probability score
+• risk category
+• retention recommendations
+
+### Model Insights Page
+
+Displays:
+
+• feature importance visualization
+• confusion matrix
+• ROC curve
+• model comparison results
+
+### About Page
+
+Explains the dataset, methodology, and system architecture.
+
+---
+
+# 📸 Screenshots
+
+Add screenshots of your deployed application.
+
+### Landing Page
+
+![Landing Page](images/landing_page.png)
+
+### Prediction Page
+
+![Prediction](images/prediction_page.png)
+
+### Model Insights
+
+![Insights](images/model_insights.png)
+
+Create a folder:
+
+```
+images/
+landing_page.png
+prediction_page.png
+model_insights.png
+```
+
+---
+
+# 📁 Project Structure
+
+```
+bank-customer-churn-prediction
+│
+├── app
+│   ├── routes.py
+│   ├── templates
+│   └── static
+│
+├── src
+│   ├── data
+│   ├── models
+│   └── utils
+│
+├── notebooks
+│   └── churn_eda.ipynb
+│
+├── artifacts
 │   ├── model.pkl
 │   ├── scaler.pkl
 │   ├── encoder.pkl
-│   ├── feature_columns.json
-│   ├── metrics.json
-│   └── plots/               # feature_importance, confusion_matrix, roc_curve, model_comparison
-├── tests/
-│   ├── test_preprocess.py
-│   └── test_predict.py
-├── data/
-│   ├── raw/
-│   └── processed/
-├── run.py                   # Flask entry
-├── run_training.py          # Train and save artifacts
+│   └── plots
+│
+├── tests
+│
+├── data
+│   ├── raw
+│   └── processed
+│
+├── run.py
+├── run_training.py
 ├── requirements.txt
-├── Procfile                 # e.g. Render / Railway
 └── README.md
 ```
 
 ---
 
-## Setup
+# 🛠 Running the Project Locally
 
-1. **Clone and install**
+### Clone the repository
 
-   ```bash
-   git clone https://github.com/gtejaswi2212/Bank-Churn-Prediction.git
-   cd Bank-Churn-Prediction
-   pip install -r requirements.txt
-   ```
+```bash
+git clone https://github.com/gtejaswi2212/bank-customer-churn-prediction.git
+cd bank-customer-churn-prediction
+```
 
-2. **Train the model** (creates `artifacts/` and plots)
+### Install dependencies
 
-   ```bash
-   python run_training.py
-   ```
+```bash
+pip install -r requirements.txt
+```
 
-3. **Run the web app**
+### Train the model
 
-   ```bash
-   python run.py
-   ```
+```bash
+python run_training.py
+```
 
-   Open **http://127.0.0.1:5000**. You’ll see the landing page, **Try Prediction**, **Model Insights**, and **About**.
+### Run the web application
 
----
+```bash
+python run.py
+```
 
-## How to Run Locally
+Open the app:
 
-| Step | Command |
-|------|--------|
-| Install deps | `pip install -r requirements.txt` |
-| Train model | `python run_training.py` |
-| Start app | `python run.py` |
-| Run tests | `pytest tests/` |
-
-The app expects `artifacts/model.pkl`, `scaler.pkl`, `encoder.pkl`, and `feature_columns.json`. If they’re missing, run `python run_training.py` first; the prediction page will show a short message if the model isn’t found.
+```
+http://127.0.0.1:5000
+```
 
 ---
 
-## ML Workflow
+# ☁ Deployment
 
-1. **Data:** Load `analytical_base_table.csv`, validate schema.
-2. **Preprocessing:** Handle missing values, one-hot encode Geography/Gender, optional derived features, StandardScaler (fit on train).
-3. **Split:** Train / validation / test (stratified).
-4. **Imbalance:** SMOTE on training set (configurable).
-5. **Models:** Logistic Regression, Random Forest, XGBoost; best by validation ROC-AUC.
-6. **Evaluation:** Accuracy, Precision, Recall, F1, ROC-AUC, confusion matrix on test set.
-7. **Artifacts:** Best model, scaler, encoder, feature list, metrics JSON, and plots under `artifacts/plots/`.
+The application is deployed on **Render**.
 
----
+Build Command
 
-## Web App Features
+```
+pip install -r requirements.txt && python run_training.py
+```
 
-- **Landing:** Project intro, key metrics (if trained), workflow, tech stack, challenges & learnings, CTAs to Try Prediction, Model Insights, GitHub.
-- **Prediction:** Form with all customer fields → churn prediction, probability, **risk category** (Low / Medium / High), short explanation, **recommended retention action**.
-- **Model Insights:** Test metrics, feature importance, confusion matrix, ROC curve, model comparison, and short business insights.
-- **About:** Dataset, approach, preprocessing, modeling, evaluation, future improvements.
+Start Command
+
+```
+gunicorn --bind 0.0.0.0:$PORT run:app
+```
 
 ---
 
-## Deploy to Render (free tier)
+# 📈 Business Use Case
 
-1. **Push this repo to GitHub** (you already have it at `github.com/gtejaswi2212/bank-customer-churn-prediction`).
+Customer success teams can use this system to identify customers with high churn probability and take proactive retention actions.
 
-2. **Go to [Render Dashboard](https://dashboard.render.com/)** → **New** → **Web Service**.
+Possible strategies:
 
-3. **Connect the repo** and select `bank-customer-churn-prediction`.
+• loyalty incentives
+• personalized engagement campaigns
+• proactive support outreach
 
-4. **Settings:**
-   - **Build Command:** `pip install -r requirements.txt && python run_training.py`
-   - **Start Command:** `gunicorn --bind 0.0.0.0:$PORT run:app`
-   - **Plan:** Free
-
-5. Click **Create Web Service**. The first deploy will install deps, train the model, and start the app. Your app will be live at `https://<your-service>.onrender.com`.
-
-**Alternative (Blueprint):** If your repo has `render.yaml`, use **New** → **Blueprint** and connect the same repo; Render will read build/start commands from the file.
-
-**If the build runs out of memory** (training on free tier can be tight): run `python run_training.py` locally, commit the `artifacts/` folder, then set **Build Command** to just `pip install -r requirements.txt`.
+Early churn detection can help businesses improve **customer lifetime value and retention rates**.
 
 ---
 
-## Future Improvements
+# 🔮 Future Improvements
 
-- Hyperparameter tuning (e.g. GridSearchCV / Optuna)
-- SHAP in the app for per-prediction explanations
-- Scheduled retraining or pipeline on new data
-- Docker image and one-click deploy
-
----
-
-## Author
-
-**Tejaswi Ganji**  
-📧 [Email](mailto:tejaswi.ganji2000@gmail.com) | 🌐 [LinkedIn](https://linkedin.com/in/gtejaswi2212) | 💻 [GitHub](https://github.com/gtejaswi2212)
+• SHAP-based explainability
+• automated model retraining
+• API endpoints for batch predictions
+• Docker containerization
+• interactive dashboards
 
 ---
 
-If you found this useful, consider giving it a ⭐ on GitHub.
+# 👩‍💻 Author
+
+**Tejaswi Ganji**
+
+MS Data Science — Stony Brook University
+
+📧 [tejaswi.ganji2000@gmail.com](mailto:tejaswi.ganji2000@gmail.com)
+💼 [https://linkedin.com/in/gtejaswi2212](https://linkedin.com/in/gtejaswi2212)
+💻 [https://github.com/gtejaswi2212](https://github.com/gtejaswi2212)
+
+---
+
+⭐ If you found this project useful, consider giving it a **star** on GitHub.
