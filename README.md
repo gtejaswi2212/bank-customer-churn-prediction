@@ -134,11 +134,24 @@ The app expects `artifacts/model.pkl`, `scaler.pkl`, `encoder.pkl`, and `feature
 
 ---
 
-## Deployment
+## Deploy to Render (free tier)
 
-- **Procfile:** `web: gunicorn --bind 0.0.0.0:$PORT run:app`
-- Set `PORT` in the environment (e.g. Render, Railway).
-- Run training (or upload pre-built artifacts) so `artifacts/` is present in the deployed environment.
+1. **Push this repo to GitHub** (you already have it at `github.com/gtejaswi2212/bank-customer-churn-prediction`).
+
+2. **Go to [Render Dashboard](https://dashboard.render.com/)** → **New** → **Web Service**.
+
+3. **Connect the repo** and select `bank-customer-churn-prediction`.
+
+4. **Settings:**
+   - **Build Command:** `pip install -r requirements.txt && python run_training.py`
+   - **Start Command:** `gunicorn --bind 0.0.0.0:$PORT run:app`
+   - **Plan:** Free
+
+5. Click **Create Web Service**. The first deploy will install deps, train the model, and start the app. Your app will be live at `https://<your-service>.onrender.com`.
+
+**Alternative (Blueprint):** If your repo has `render.yaml`, use **New** → **Blueprint** and connect the same repo; Render will read build/start commands from the file.
+
+**If the build runs out of memory** (training on free tier can be tight): run `python run_training.py` locally, commit the `artifacts/` folder, then set **Build Command** to just `pip install -r requirements.txt`.
 
 ---
 
