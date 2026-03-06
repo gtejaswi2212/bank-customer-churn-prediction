@@ -1,118 +1,161 @@
-# 🏦 Bank Churn Prediction  
+# Bank Customer Churn Prediction
 
-**Tools:** Python, Pandas, Scikit-learn, XGBoost, Flask  
-**Dataset:** `analytical_base_table.csv`  
-
----
-
-## 📊 Overview  
-This project aims to predict **customer churn** for a bank using machine learning models.  
-By analyzing customer demographics and transaction history, the model identifies customers who are most likely to leave, helping the bank take proactive retention actions.  
-
-It includes:
-- **Exploratory Data Analysis (EDA)** to uncover behavioral patterns  
-- **Model training and optimization** using Scikit-learn and XGBoost  
-- **Flask web app deployment** for real-time prediction  
+A production-style, end-to-end **customer churn prediction** project: from raw data to a deployable web app with model insights and business-oriented outputs. Built to showcase ML fundamentals, software engineering practices, and clear business impact.
 
 ---
 
-## 🧠 Objectives  
-- Build a predictive model that classifies customers as *churn* or *non-churn*.  
-- Identify the main drivers behind customer churn.  
-- Deploy the model as a simple web application for real-time inference.  
+## Overview
+
+**Business problem:** Banks need to identify customers at risk of churning so they can take proactive retention actions. This project delivers a trained classifier, explainability (feature importance, risk categories), and a web interface for predictions and insights.
+
+**What’s included:**
+
+- **Modular ML pipeline:** load → validate → preprocess → encode → scale → train (Logistic Regression, Random Forest, XGBoost) → evaluate → save artifacts
+- **Reproducible training** with train/validation/test splits, optional SMOTE for class imbalance, and saved encoders/scalers
+- **Model explainability:** feature importance plots, confusion matrix, ROC curve, model comparison
+- **Web app:** landing page, prediction form (churn probability + risk category + retention action), model insights, about page
+- **Tests** for preprocessing and prediction helpers
+- **Deployment-ready:** Gunicorn, Procfile, environment-friendly config
 
 ---
 
-## 📈 Project Workflow  
+## Dataset
 
-### 1️⃣ Data Preparation  
-- Imported and cleaned `analytical_base_table.csv`  
-- Handled missing values and outliers  
-- Encoded categorical variables and scaled numeric features  
-- Balanced the dataset using oversampling  
-
-### 2️⃣ Exploratory Data Analysis (EDA)  
-- Examined churn distribution and customer demographics  
-- Visualized key features such as tenure, balance, and credit score  
-- Identified correlations between churn and customer attributes  
-
-### 3️⃣ Model Building  
-- Built and compared multiple models:
-  - Logistic Regression  
-  - Random Forest  
-  - XGBoost (final model)  
-- Optimized hyperparameters using **GridSearchCV**  
-- Evaluated models based on:
-  - Accuracy  
-  - Precision, Recall, F1-Score  
-  - ROC-AUC  
-
-### 4️⃣ Model Deployment  
-- Built a **Flask web app** (`bank_churn_prediction.py`) to serve model predictions.  
-- Integrated trained XGBoost model for inference.  
-- Configured **Gunicorn** for WSGI deployment and scalability.  
-
+- **File:** `analytical_base_table.csv` (in repo root; can also be placed under `data/raw/`)
+- **Rows:** ~10,000 customers
+- **Columns:** CreditScore, Geography, Gender, Age, Tenure, Balance, NumOfProducts, HasCrCard, IsActiveMember, EstimatedSalary, **Exited** (churn target)
 
 ---
 
-## ⚙️ Installation & Setup  
+## Project Structure
 
-1️⃣ Clone the Repository
-```bash
-git clone https://github.com/gtejaswi2212/Bank-Churn-Prediction.git
-cd Bank-Churn-Prediction
+```
+bank-customer-churn-prediction/
+├── app/
+│   ├── __init__.py          # Flask app factory
+│   ├── routes.py            # Routes and form handling
+│   ├── templates/           # Jinja2 HTML
+│   └── static/css/          # Styles
+├── src/
+│   ├── data/
+│   │   ├── preprocess.py    # Load, encode, split
+│   │   ├── validate.py      # Schema validation
+│   │   └── feature_engineering.py
+│   ├── models/
+│   │   ├── train.py         # Full training pipeline
+│   │   ├── predict.py       # Inference + risk + actions
+│   │   ├── evaluate.py      # Metrics
+│   │   └── explain.py       # Feature importance / SHAP
+│   └── utils/
+│       ├── config.py        # Paths, constants
+│       ├── logger.py
+│       └── helpers.py
+├── notebooks/
+│   └── churn_eda.ipynb      # EDA
+├── artifacts/               # After training
+│   ├── model.pkl
+│   ├── scaler.pkl
+│   ├── encoder.pkl
+│   ├── feature_columns.json
+│   ├── metrics.json
+│   └── plots/               # feature_importance, confusion_matrix, roc_curve, model_comparison
+├── tests/
+│   ├── test_preprocess.py
+│   └── test_predict.py
+├── data/
+│   ├── raw/
+│   └── processed/
+├── run.py                   # Flask entry
+├── run_training.py          # Train and save artifacts
+├── requirements.txt
+├── Procfile                 # e.g. Render / Railway
+└── README.md
 ```
 
-2️⃣ Install Dependencies
-```bash
-pip install -r requirements.txt
-```
-3️⃣ Run the Flask Application
-```bash
-python bank_churn_prediction.py
-```
 ---
 
-🧰 Key Libraries
+## Setup
 
-- pandas, numpy → Data processing and analysis
-- scikit-learn → ML model building and evaluation
-- xgboost → Boosted tree model for superior accuracy
-- imbalanced-learn → Oversampling (SMOTE) for class balance
-- Flask, Gunicorn → Backend web framework and deployment
+1. **Clone and install**
 
----
+   ```bash
+   git clone https://github.com/gtejaswi2212/Bank-Churn-Prediction.git
+   cd Bank-Churn-Prediction
+   pip install -r requirements.txt
+   ```
 
-💡 Insights & Takeaways
+2. **Train the model** (creates `artifacts/` and plots)
 
-- Customers with low tenure, low balance, and high credit card usage show higher churn rates.
-- Retention strategies should focus on offering loyalty benefits to these customers.
-- The XGBoost model achieved the highest ROC-AUC score and balanced precision-recall.
+   ```bash
+   python run_training.py
+   ```
 
----
+3. **Run the web app**
 
-🧾 Requirements
+   ```bash
+   python run.py
+   ```
 
-All dependencies are listed in requirements.txt.
-Install them using:
-```bash
-pip install -r requirements.txt
-```
----
-
-🌐 Future Enhancements
-
-- Deploy the model using Docker or AWS Lambda for scalability.
-- Integrate Streamlit dashboard for visual interaction and prediction testing.
-- Automate data refresh and retraining for real-time churn tracking.
+   Open **http://127.0.0.1:5000**. You’ll see the landing page, **Try Prediction**, **Model Insights**, and **About**.
 
 ---
 
+## How to Run Locally
 
-## 👤 Author  
+| Step | Command |
+|------|--------|
+| Install deps | `pip install -r requirements.txt` |
+| Train model | `python run_training.py` |
+| Start app | `python run.py` |
+| Run tests | `pytest tests/` |
+
+The app expects `artifacts/model.pkl`, `scaler.pkl`, `encoder.pkl`, and `feature_columns.json`. If they’re missing, run `python run_training.py` first; the prediction page will show a short message if the model isn’t found.
+
+---
+
+## ML Workflow
+
+1. **Data:** Load `analytical_base_table.csv`, validate schema.
+2. **Preprocessing:** Handle missing values, one-hot encode Geography/Gender, optional derived features, StandardScaler (fit on train).
+3. **Split:** Train / validation / test (stratified).
+4. **Imbalance:** SMOTE on training set (configurable).
+5. **Models:** Logistic Regression, Random Forest, XGBoost; best by validation ROC-AUC.
+6. **Evaluation:** Accuracy, Precision, Recall, F1, ROC-AUC, confusion matrix on test set.
+7. **Artifacts:** Best model, scaler, encoder, feature list, metrics JSON, and plots under `artifacts/plots/`.
+
+---
+
+## Web App Features
+
+- **Landing:** Project intro, key metrics (if trained), workflow, tech stack, challenges & learnings, CTAs to Try Prediction, Model Insights, GitHub.
+- **Prediction:** Form with all customer fields → churn prediction, probability, **risk category** (Low / Medium / High), short explanation, **recommended retention action**.
+- **Model Insights:** Test metrics, feature importance, confusion matrix, ROC curve, model comparison, and short business insights.
+- **About:** Dataset, approach, preprocessing, modeling, evaluation, future improvements.
+
+---
+
+## Deployment
+
+- **Procfile:** `web: gunicorn --bind 0.0.0.0:$PORT run:app`
+- Set `PORT` in the environment (e.g. Render, Railway).
+- Run training (or upload pre-built artifacts) so `artifacts/` is present in the deployed environment.
+
+---
+
+## Future Improvements
+
+- Hyperparameter tuning (e.g. GridSearchCV / Optuna)
+- SHAP in the app for per-prediction explanations
+- Scheduled retraining or pipeline on new data
+- Docker image and one-click deploy
+
+---
+
+## Author
+
 **Tejaswi Ganji**  
-📧 [Email](mailto:tejaswi.ganji2000@gmail.com) | 🌐 [LinkedIn](https://linkedin.com/in/gtejaswi2212) | 💻 [GitHub](https://github.com/gtejaswi2212)  
+📧 [Email](mailto:tejaswi.ganji2000@gmail.com) | 🌐 [LinkedIn](https://linkedin.com/in/gtejaswi2212) | 💻 [GitHub](https://github.com/gtejaswi2212)
 
 ---
 
-⭐ **If you found this project insightful, give it a star on GitHub!**
+If you found this useful, consider giving it a ⭐ on GitHub.

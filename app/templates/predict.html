@@ -1,0 +1,84 @@
+{% extends "base.html" %}
+{% block title %}Try Prediction — Bank Churn{% endblock %}
+{% block content %}
+<div class="container">
+  <section class="hero" style="padding: 1.5rem 0;">
+    <h1>Churn Prediction</h1>
+    <p class="subtitle">Enter customer details to get a churn probability, risk category, and recommended retention action.</p>
+  </section>
+
+  <div class="form-section card">
+    <form method="post" action="{{ url_for('predict') }}">
+      <div class="form-grid">
+        <div class="form-group">
+          <label for="CreditScore">Credit Score</label>
+          <input type="number" id="CreditScore" name="CreditScore" min="300" max="850" value="{{ request.form.CreditScore or 650 }}" required>
+        </div>
+        <div class="form-group">
+          <label for="Geography">Geography</label>
+          <select id="Geography" name="Geography">
+            <option value="France" {{ 'selected' if (request.form.Geography or 'France') == 'France' }}>France</option>
+            <option value="Germany" {{ 'selected' if request.form.Geography == 'Germany' }}>Germany</option>
+            <option value="Spain" {{ 'selected' if request.form.Geography == 'Spain' }}>Spain</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="Gender">Gender</label>
+          <select id="Gender" name="Gender">
+            <option value="Female" {{ 'selected' if (request.form.Gender or 'Female') == 'Female' }}>Female</option>
+            <option value="Male" {{ 'selected' if request.form.Gender == 'Male' }}>Male</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="Age">Age</label>
+          <input type="number" id="Age" name="Age" min="18" max="100" value="{{ request.form.Age or 40 }}" required>
+        </div>
+        <div class="form-group">
+          <label for="Tenure">Tenure (years)</label>
+          <input type="number" id="Tenure" name="Tenure" min="0" max="10" value="{{ request.form.Tenure or 5 }}" required>
+        </div>
+        <div class="form-group">
+          <label for="Balance">Balance</label>
+          <input type="number" id="Balance" name="Balance" min="0" step="0.01" value="{{ request.form.Balance or 0 }}" required>
+        </div>
+        <div class="form-group">
+          <label for="NumOfProducts">Number of Products</label>
+          <input type="number" id="NumOfProducts" name="NumOfProducts" min="1" max="4" value="{{ request.form.NumOfProducts or 1 }}" required>
+        </div>
+        <div class="form-group">
+          <label for="HasCrCard">Has Credit Card</label>
+          <select id="HasCrCard" name="HasCrCard">
+            <option value="1" {{ 'selected' if (request.form.HasCrCard or '1') == '1' }}>Yes</option>
+            <option value="0" {{ 'selected' if request.form.HasCrCard == '0' }}>No</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="IsActiveMember">Active Member</label>
+          <select id="IsActiveMember" name="IsActiveMember">
+            <option value="1" {{ 'selected' if (request.form.IsActiveMember or '1') == '1' }}>Yes</option>
+            <option value="0" {{ 'selected' if request.form.IsActiveMember == '0' }}>No</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="EstimatedSalary">Estimated Salary</label>
+          <input type="number" id="EstimatedSalary" name="EstimatedSalary" min="0" step="0.01" value="{{ request.form.EstimatedSalary or 100000 }}" required>
+        </div>
+      </div>
+      <div class="form-actions">
+        <button type="submit" class="btn btn-primary">Predict Churn Risk</button>
+      </div>
+    </form>
+  </div>
+
+  {% if result %}
+  <div class="form-section">
+    <div class="result-box">
+      <span class="risk-badge {{ result.risk_category|lower }}">{{ result.risk_category }} Risk</span>
+      <div class="probability">Churn probability: {{ "%.1f"|format(result.churn_probability * 100) }}%</div>
+      <p style="margin: 0.5rem 0 0 0; color: var(--text-muted);">{{ result.explanation }}</p>
+      <div class="action-text"><strong>Recommended action:</strong> {{ result.retention_action }}</div>
+    </div>
+  </div>
+  {% endif %}
+</div>
+{% endblock %}

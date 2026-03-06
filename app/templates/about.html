@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+{% block title %}About This Project — Bank Churn{% endblock %}
+{% block content %}
+<div class="container">
+  <section class="hero" style="padding: 1.5rem 0;">
+    <h1>About This Project</h1>
+    <p class="subtitle">Dataset, approach, and technical choices.</p>
+  </section>
+
+  <div class="card prose">
+    <h2>Dataset</h2>
+    <p>
+      We use the <strong>analytical_base_table.csv</strong> (10,000 rows) with customer demographics and product usage:
+      credit score, geography, gender, age, tenure, balance, number of products, credit card ownership,
+      active membership, estimated salary, and the target <strong>Exited</strong> (churn).
+    </p>
+
+    <h2>Approach</h2>
+    <p>
+      The pipeline is built for reproducibility and clarity: load → validate → engineer features →
+      encode categoricals → scale → split (train/val/test) → handle class imbalance (SMOTE) →
+      train multiple models → select best by ROC-AUC → evaluate on test set → save artifacts and plots.
+    </p>
+
+    <h2>Preprocessing</h2>
+    <ul>
+      <li>Missing values filled with median (numeric) or mode (categorical).</li>
+      <li>Categorical variables (Geography, Gender) one-hot encoded with drop-first.</li>
+      <li>Numeric features standardized with StandardScaler (fit on train only).</li>
+      <li>Optional derived features: balance-to-salary ratio, tenure-to-age ratio, multi-product flag.</li>
+    </ul>
+
+    <h2>Modeling</h2>
+    <p>
+      We compare <strong>Logistic Regression</strong>, <strong>Random Forest</strong>, and <strong>XGBoost</strong>
+      on a validation set. The model with the highest ROC-AUC is chosen and evaluated on the held-out test set.
+      Class imbalance is addressed with SMOTE on the training set.
+    </p>
+
+    <h2>Evaluation</h2>
+    <p>
+      Metrics reported: Accuracy, Precision, Recall, F1, ROC-AUC, and confusion matrix. Plots include
+      feature importance, ROC curve, and model comparison. These are saved under <code>artifacts/</code>
+      and displayed in the Model Insights page.
+    </p>
+
+    <h2>Future Improvements</h2>
+    <ul>
+      <li>Hyperparameter tuning (e.g. GridSearchCV or Optuna).</li>
+      <li>SHAP integration for per-prediction explainability in the app.</li>
+      <li>Retraining pipeline on a schedule or on new data.</li>
+      <li>Docker image and one-click deploy (e.g. Render, Railway).</li>
+    </ul>
+  </div>
+</div>
+{% endblock %}

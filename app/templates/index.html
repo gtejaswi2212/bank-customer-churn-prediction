@@ -1,0 +1,81 @@
+{% extends "base.html" %}
+{% block title %}Bank Churn Prediction — ML-Powered Retention{% endblock %}
+{% block content %}
+<div class="container">
+  <section class="hero">
+    <h1>Bank Customer Churn Prediction</h1>
+    <p class="subtitle">
+      Identify at-risk customers before they leave. This project uses machine learning to predict churn
+      and recommend retention actions—turning data into actionable business decisions.
+    </p>
+    <div class="btn-group" style="justify-content: center;">
+      <a href="{{ url_for('predict') }}" class="btn btn-primary">Try Prediction</a>
+      <a href="{{ url_for('insights') }}" class="btn btn-secondary">View Model Insights</a>
+      <a href="https://github.com/gtejaswi2212/Bank-Churn-Prediction" target="_blank" rel="noopener" class="btn btn-secondary">View GitHub</a>
+    </div>
+  </section>
+
+  {% if metrics %}
+  <section class="card" style="margin-top: 2rem;">
+    <h2 class="section-title">Key Results</h2>
+    <div class="metrics-grid">
+      <div class="metric-card">
+        <div class="label">Best Model</div>
+        <div class="value" style="font-size: 1rem; font-family: var(--font-sans);">{{ metrics.best_model }}</div>
+      </div>
+      <div class="metric-card">
+        <div class="label">ROC-AUC (Test)</div>
+        <div class="value">{{ "%.3f"|format(metrics.test_metrics.roc_auc) }}</div>
+      </div>
+      <div class="metric-card">
+        <div class="label">F1 Score</div>
+        <div class="value">{{ "%.3f"|format(metrics.test_metrics.f1) }}</div>
+      </div>
+      <div class="metric-card">
+        <div class="label">Precision</div>
+        <div class="value">{{ "%.3f"|format(metrics.test_metrics.precision) }}</div>
+      </div>
+      <div class="metric-card">
+        <div class="label">Recall</div>
+        <div class="value">{{ "%.3f"|format(metrics.test_metrics.recall) }}</div>
+      </div>
+    </div>
+  </section>
+  {% endif %}
+
+  <section class="card" style="margin-top: 1.5rem;">
+    <h2 class="section-title">How It Works</h2>
+    <ol class="workflow-list" style="list-style: decimal inside;">
+      <li><span class="workflow-num">1</span> Customer and transaction data is cleaned and encoded.</li>
+      <li><span class="workflow-num">2</span> Multiple models (Logistic Regression, Random Forest, XGBoost) are trained and compared.</li>
+      <li><span class="workflow-num">3</span> The best model is selected and evaluated on a held-out test set.</li>
+      <li><span class="workflow-num">4</span> Predictions are turned into risk categories and retention recommendations.</li>
+    </ol>
+  </section>
+
+  <section class="card" style="margin-top: 1.5rem;">
+    <h2 class="section-title">Why This Project Matters</h2>
+    <p style="color: var(--text-muted); margin: 0;">
+      Reducing churn directly improves revenue and lifetime value. This end-to-end pipeline demonstrates
+      strong ML fundamentals (preprocessing, class imbalance, evaluation), explainability, and a
+      production-style web app—exactly the kind of work that drives business impact.
+    </p>
+  </section>
+
+  <section class="card" style="margin-top: 1.5rem;">
+    <h2 class="section-title">Tech Stack</h2>
+    <p style="color: var(--text-muted); margin: 0 0 0.5rem 0;">
+      Python, Pandas, Scikit-learn, XGBoost, imbalanced-learn, Flask, Jinja2, Gunicorn. Optional: SHAP for explainability.
+    </p>
+  </section>
+
+  <section class="card" style="margin-top: 1.5rem;">
+    <h2 class="section-title">Challenges & Learnings</h2>
+    <ul style="color: var(--text-muted); padding-left: 1.5rem; margin: 0;">
+      <li>Class imbalance handled with SMOTE and metrics (precision/recall/F1, ROC-AUC) chosen for skewed targets.</li>
+      <li>Reproducible pipeline: fixed splits, saved encoders/scalers and feature list for consistent train and inference.</li>
+      <li>Business-facing output: risk bands and retention actions so stakeholders can act on predictions.</li>
+    </ul>
+  </section>
+</div>
+{% endblock %}

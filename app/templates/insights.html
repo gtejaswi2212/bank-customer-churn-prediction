@@ -1,0 +1,77 @@
+{% extends "base.html" %}
+{% block title %}Model Insights — Bank Churn{% endblock %}
+{% block content %}
+<div class="container">
+  <section class="hero" style="padding: 1.5rem 0;">
+    <h1>Model Insights</h1>
+    <p class="subtitle">Performance metrics, feature importance, and business interpretation.</p>
+  </section>
+
+  {% if metrics %}
+  <div class="card">
+    <h2 class="section-title">Performance Summary</h2>
+    <p style="color: var(--text-muted); margin-bottom: 1rem;">Best model: <strong>{{ metrics.best_model }}</strong></p>
+    <div class="metrics-grid">
+      <div class="metric-card">
+        <div class="label">Accuracy</div>
+        <div class="value">{{ "%.3f"|format(metrics.test_metrics.accuracy) }}</div>
+      </div>
+      <div class="metric-card">
+        <div class="label">Precision</div>
+        <div class="value">{{ "%.3f"|format(metrics.test_metrics.precision) }}</div>
+      </div>
+      <div class="metric-card">
+        <div class="label">Recall</div>
+        <div class="value">{{ "%.3f"|format(metrics.test_metrics.recall) }}</div>
+      </div>
+      <div class="metric-card">
+        <div class="label">F1 Score</div>
+        <div class="value">{{ "%.3f"|format(metrics.test_metrics.f1) }}</div>
+      </div>
+      <div class="metric-card">
+        <div class="label">ROC-AUC</div>
+        <div class="value">{{ "%.3f"|format(metrics.test_metrics.roc_auc) }}</div>
+      </div>
+    </div>
+  </div>
+
+  {% if has_plots and plots_dir %}
+  <div class="card">
+    <h2 class="section-title">Visualizations</h2>
+    <div class="insight-grid">
+      <div>
+        <h3 style="font-size: 1rem; color: var(--text-muted); margin-bottom: 0.5rem;">Feature Importance (Churn Drivers)</h3>
+        <img src="{{ url_for('serve_plot', filename='feature_importance.png') }}" alt="Feature importance">
+      </div>
+      <div>
+        <h3 style="font-size: 1rem; color: var(--text-muted); margin-bottom: 0.5rem;">Confusion Matrix</h3>
+        <img src="{{ url_for('serve_plot', filename='confusion_matrix.png') }}" alt="Confusion matrix">
+      </div>
+      <div>
+        <h3 style="font-size: 1rem; color: var(--text-muted); margin-bottom: 0.5rem;">ROC Curve</h3>
+        <img src="{{ url_for('serve_plot', filename='roc_curve.png') }}" alt="ROC curve">
+      </div>
+      <div>
+        <h3 style="font-size: 1rem; color: var(--text-muted); margin-bottom: 0.5rem;">Model Comparison</h3>
+        <img src="{{ url_for('serve_plot', filename='model_comparison.png') }}" alt="Model comparison">
+      </div>
+    </div>
+  </div>
+  {% endif %}
+
+  <div class="card">
+    <h2 class="section-title">Business Insights</h2>
+    <ul style="color: var(--text-muted); padding-left: 1.5rem;">
+      <li>Features like <strong>Age</strong>, <strong>Balance</strong>, and <strong>Geography</strong> are strong churn drivers.</li>
+      <li>Low tenure and declining balance may indicate early disengagement.</li>
+      <li>Customers with multiple products tend to have different churn profiles than single-product holders.</li>
+      <li>Use risk categories (Low/Medium/High) to prioritize retention outreach and tailor actions.</li>
+    </ul>
+  </div>
+  {% else %}
+  <div class="card">
+    <p style="color: var(--text-muted);">Run training to generate metrics and plots: <code style="background: var(--bg); padding: 0.2rem 0.5rem; border-radius: 4px;">python run_training.py</code></p>
+  </div>
+  {% endif %}
+</div>
+{% endblock %}
